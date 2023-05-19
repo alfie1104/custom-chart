@@ -1,5 +1,9 @@
 const math = {};
 
+math.equals = (p1, p2) => {
+  return p1[0] == p2[0] && p1[1] == p2[1];
+};
+
 /**
  * Function to get linear interpolation value
  * @param {number} a - first value of range
@@ -62,10 +66,73 @@ math.remapPoint = (oldBounds, newBouns, point) => {
 };
 
 /**
+ * Add p2 to p1
+ * @param {[number, number]} p1 - x1, y1
+ * @param {[number, number]} p2 - x2, y2
+ * @returns [x,y] (x : x1 + x2, y : y1 + y2)
+ */
+math.add = (p1, p2) => {
+  return [p1[0] + p2[0], p1[1] + p2[1]];
+};
+
+/**
+ * Subtract p2 from p1
+ * @param {[number, number]} p1 - x1, y1
+ * @param {[number, number]} p2 - x2, y2
+ * @returns [x,y] (x : x1 - x2, y : y1 - y2)
+ */
+math.subtract = (p1, p2) => {
+  return [p1[0] - p2[0], p1[1] - p2[1]];
+};
+
+/**
+ * Calculating scaled values
+ * @param {[number, number]} p
+ * @param {number} scaler
+ * @returns [p[0] * scaler, p[1] * scalder]
+ */
+math.scale = (p, scaler) => {
+  return [p[0] * scaler, p[1] * scaler];
+};
+
+/**
+ * Get euclidian distance between p1 and p2
+ * @param {[number, number]} p1
+ * @param {[number, number]} p2
+ * @returns
+ */
+math.distance = (p1, p2) => {
+  return Math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2);
+};
+
+/**
  * Formatting number value to have fixed floating point
  * @param {number} n - given number
  * @param {number} dec - number of decimal. default 0
  */
 math.formatNumber = (n, dec = 0) => {
   return n.toFixed(dec);
+};
+
+/**
+ * Find the nearest points from loc and return the index in the points list
+ * @param {[number, number]} loc
+ * @param {[[number,number]]} points
+ * @returns [number, number]
+ */
+math.getNearest = (loc, points) => {
+  let minDist = Number.MAX_SAFE_INTEGER;
+  let nearestIndex = 0;
+
+  for (let i = 0; i < points.length; i++) {
+    const point = points[i];
+    const d = math.distance(loc, point);
+
+    if (d < minDist) {
+      minDist = d;
+      nearestIndex = i;
+    }
+  }
+
+  return nearestIndex;
 };
